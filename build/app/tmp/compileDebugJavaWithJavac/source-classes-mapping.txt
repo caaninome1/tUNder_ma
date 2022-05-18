@@ -1,0 +1,4 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+course/flutter/stores/BuildConfig.java
+ course.flutter.stores.BuildConfig

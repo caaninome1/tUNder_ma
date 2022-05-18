@@ -1,0 +1,4 @@
+#Tue May 17 19:51:11 COT 2022
+base.0=/Users/carlos/Documents/Arquitectura de Software/tUNder/repositorio propio/tUNder/tUNder_ma/build/app/intermediates/dex/debug/mergeDexDebug/classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
