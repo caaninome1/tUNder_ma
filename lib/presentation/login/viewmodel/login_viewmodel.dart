@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:dartz/dartz.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:stores/app/functions.dart';
 import 'package:stores/domain/usecase/login_usecase.dart';
 import 'package:stores/presentation/base/base_view_model.dart';
@@ -7,18 +9,13 @@ import 'package:stores/presentation/common/freezed_data_classes.dart';
 import 'package:stores/presentation/common/state_renderer/state_rederer_implementer.dart';
 import 'package:stores/presentation/common/state_renderer/state_renderer.dart';
 
-class LoginViewModel extends BaseViewModel
-    with LoginViewModelInputs, LoginViewModelOutputs {
-  final StreamController _usernameStreamController =
-      StreamController<String>.broadcast();
-  final StreamController _passwordStreamController =
-      StreamController<String>.broadcast();
+class LoginViewModel extends BaseViewModel with LoginViewModelInputs, LoginViewModelOutputs {
+  final StreamController _usernameStreamController = StreamController<String>.broadcast();
+  final StreamController _passwordStreamController = StreamController<String>.broadcast();
 
-  final StreamController _areInputsValidStreamController =
-      StreamController<void>.broadcast();
+  final StreamController _areInputsValidStreamController = StreamController<void>.broadcast();
 
-  final StreamController isUserLoggedInSuccessfullyStreamController =
-      StreamController<bool>();
+  final StreamController isUserLoggedInSuccessfullyStreamController = StreamController<bool>();
 
   var loginObject = LoginObject("", "");
   final LoginUseCase _loginUseCase;
@@ -55,6 +52,7 @@ class LoginViewModel extends BaseViewModel
         stateRendererType: StateRendererType.popupLoadingState,
       ),
     );
+
     (await _loginUseCase.execute(
       LoginUseCaseInput(
         loginObject.username,
@@ -109,8 +107,7 @@ class LoginViewModel extends BaseViewModel
   }
 
   bool _areAllInputsValid() {
-    return _isUsernameValid(loginObject.username) &&
-        _isPasswordValid(loginObject.password);
+    return _isUsernameValid(loginObject.username) && _isPasswordValid(loginObject.password);
   }
 }
 

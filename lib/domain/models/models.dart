@@ -71,6 +71,55 @@ class Service {
   );
 }
 
+class Token {
+  int userID;
+  String token;
+
+  Token(this.token, this.userID);
+}
+
+class User {
+  int id;
+  String name;
+  String email;
+  String password;
+
+  User(this.id, this.name, this.email, this.password);
+}
+
+class Profile {
+  String identification;
+  String name;
+  int age;
+  String occupation;
+  String gender;
+  String city;
+  String phone;
+  String campus;
+  String faculty;
+  String academicProgram;
+  String genderInterest;
+  String profileImageId;
+  String description;
+  List characteristic;
+
+  Profile(
+      this.identification,
+      this.name,
+      this.age,
+      this.occupation,
+      this.gender,
+      this.city,
+      this.phone,
+      this.campus,
+      this.faculty,
+      this.academicProgram,
+      this.genderInterest,
+      this.profileImageId,
+      this.description,
+      this.characteristic);
+}
+
 class Store {
   int id;
   String title;

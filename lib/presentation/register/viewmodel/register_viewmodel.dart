@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:stores/app/functions.dart';
@@ -11,21 +12,14 @@ import 'package:stores/presentation/resources/strings_manager.dart';
 
 class RegisterViewModel extends BaseViewModel
     with RegisterViewModelInputs, RegisterViewModelOutputs {
-  final StreamController _usernameStreamController =
-      StreamController<String>.broadcast();
-  final StreamController _passwordStreamController =
-      StreamController<String>.broadcast();
-  final StreamController _emailStreamController =
-      StreamController<String>.broadcast();
-  final StreamController _profilePicutreStreamController =
-      StreamController<File>.broadcast();
-  final StreamController _mobileNumberStreamController =
-      StreamController<String>.broadcast();
-  final StreamController _countryMobileCodeStreamController =
-      StreamController<String>.broadcast();
-  final StreamController _areInputsValidStreamController =
-      StreamController<void>.broadcast();
-  final StreamController isUserRegisteredSuccessfullyStreamController =
+  final StreamController _usernameStreamController = StreamController<String>.broadcast();
+  final StreamController _passwordStreamController = StreamController<String>.broadcast();
+  final StreamController _emailStreamController = StreamController<String>.broadcast();
+  final StreamController _profilePicutreStreamController = StreamController<File>.broadcast();
+  final StreamController _mobileNumberStreamController = StreamController<String>.broadcast();
+  final StreamController _countryMobileCodeStreamController = StreamController<String>.broadcast();
+  final StreamController _areInputsValidStreamController = StreamController<void>.broadcast();
+  final StreamController<bool> isUserRegisteredSuccessfullyStreamController =
       StreamController<bool>();
 
   var registerObject = RegisterObject("", "", "", "", "", "");
@@ -77,9 +71,8 @@ class RegisterViewModel extends BaseViewModel
       _areInputsValidStreamController.stream.map((_) => _areAllInputsValid());
 
   @override
-  Stream<bool> get outCountryMobileCodeValid =>
-      _countryMobileCodeStreamController.stream.map(
-          (countryMobileCode) => _isCountryMobileCodeValid(countryMobileCode));
+  Stream<bool> get outCountryMobileCodeValid => _countryMobileCodeStreamController.stream
+      .map((countryMobileCode) => _isCountryMobileCodeValid(countryMobileCode));
 
   @override
   Stream<bool> get outEmailValid =>
@@ -90,22 +83,19 @@ class RegisterViewModel extends BaseViewModel
       .map((mobileNumber) => _isMobileNumberValid(mobileNumber));
 
   @override
-  Stream<bool> get outPasswordValid => _passwordStreamController.stream
-      .map((password) => _isPasswordValid(password));
+  Stream<bool> get outPasswordValid =>
+      _passwordStreamController.stream.map((password) => _isPasswordValid(password));
 
   @override
-  Stream<File> get outProfilePicture =>
-      _profilePicutreStreamController.stream.map((file) => file);
+  Stream<File> get outProfilePicture => _profilePicutreStreamController.stream.map((file) => file);
 
   @override
-  Stream<bool> get outUsernameValid => _usernameStreamController.stream
-      .map((username) => _isUsernameValid(username));
+  Stream<bool> get outUsernameValid =>
+      _usernameStreamController.stream.map((username) => _isUsernameValid(username));
 
   @override
-  Stream<String?> get outErrorCountryMobileCode =>
-      outCountryMobileCodeValid.map(
-        (isCountryMobileCode) =>
-            isCountryMobileCode ? null : AppStrings.errorCountryMobileCode,
+  Stream<String?> get outErrorCountryMobileCode => outCountryMobileCodeValid.map(
+        (isCountryMobileCode) => isCountryMobileCode ? null : AppStrings.errorCountryMobileCode,
       );
 
   @override
@@ -115,8 +105,7 @@ class RegisterViewModel extends BaseViewModel
 
   @override
   Stream<String?> get outErrorMobileNumber => outMobileNumberValid.map(
-        (isMobileNumber) =>
-            isMobileNumber ? null : AppStrings.errorMobileNumber,
+        (isMobileNumber) => isMobileNumber ? null : AppStrings.errorMobileNumber,
       );
 
   @override
@@ -136,6 +125,9 @@ class RegisterViewModel extends BaseViewModel
         stateRendererType: StateRendererType.popupLoadingState,
       ),
     );
+    File img = File(registerObject.profilePicture);
+    String b64 = base64Encode(img.readAsBytesSync());
+    print(b64);
     (await _registerUseCase.execute(
       RegisterUseCaseInput(
         registerObject.username,
@@ -143,7 +135,7 @@ class RegisterViewModel extends BaseViewModel
         registerObject.mobileNumber,
         registerObject.email,
         registerObject.password,
-        registerObject.profilePicture,
+        b64,
       ),
     ))
         .fold(
@@ -152,8 +144,10 @@ class RegisterViewModel extends BaseViewModel
         failure.message,
       )),
       (data) {
-        inputState.add(ContentState());
-        isUserRegisteredSuccessfullyStreamController.add(true);
+        inputState.add(ErrorState(
+          StateRendererType.popupSuccessState,
+          "Registro exitoso",
+        ));
       },
     );
   }
@@ -162,8 +156,7 @@ class RegisterViewModel extends BaseViewModel
   setCountryMobileCode(String countryMobileCode) {
     inputCountryMobileCode.add(countryMobileCode);
     if (_isCountryMobileCodeValid(countryMobileCode)) {
-      registerObject =
-          registerObject.copyWith(countryMobileCode: countryMobileCode);
+      registerObject = registerObject.copyWith(countryMobileCode: countryMobileCode);
     } else {
       registerObject = registerObject.copyWith(countryMobileCode: "");
     }
@@ -218,8 +211,7 @@ class RegisterViewModel extends BaseViewModel
   setProfilePicture(File profilePicture) {
     inputProfilePicture.add(profilePicture);
     if (_isProfilePictureValid(profilePicture)) {
-      registerObject =
-          registerObject.copyWith(profilePicture: profilePicture.path);
+      registerObject = registerObject.copyWith(profilePicture: profilePicture.path);
     } else {
       registerObject = registerObject.copyWith(profilePicture: "");
     }

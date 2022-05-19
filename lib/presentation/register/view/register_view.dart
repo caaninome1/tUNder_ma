@@ -49,8 +49,7 @@ class _RegisterViewState extends State<RegisterView> {
     _mobileNumberController.addListener(() {
       _viewModel.setMobileNumber(_mobileNumberController.text);
     });
-    _viewModel.isUserRegisteredSuccessfullyStreamController.stream
-        .listen((isRegesterd) {
+    _viewModel.isUserRegisteredSuccessfullyStreamController.stream.listen((isRegesterd) {
       if (isRegesterd) {
         SchedulerBinding.instance.addPostFrameCallback(
           (_) => _appPrefrences.setUserRegistered(),
@@ -161,9 +160,7 @@ class _RegisterViewState extends State<RegisterView> {
           key: _formKey,
           child: Column(
             children: [
-              const Center(
-                  child:
-                      Image(image: AssetImage(ImageAssetsManager.splashLogo))),
+              const Center(child: Image(image: AssetImage(ImageAssetsManager.splashLogo))),
               const SizedBox(height: AppSize.s1_5),
               Padding(
                 padding: const EdgeInsets.only(
@@ -196,8 +193,7 @@ class _RegisterViewState extends State<RegisterView> {
                       Expanded(
                         flex: 2,
                         child: CountryCodePicker(
-                          onChanged: (country) =>
-                              _viewModel.setCountryMobileCode(
+                          onChanged: (country) => _viewModel.setCountryMobileCode(
                             country.dialCode ?? Constants.token,
                           ),
                           initialSelection: '+20',
@@ -279,8 +275,7 @@ class _RegisterViewState extends State<RegisterView> {
                 child: Container(
                   height: AppSize.s40,
                   decoration: BoxDecoration(
-                    borderRadius:
-                        const BorderRadius.all(Radius.circular(AppSize.s8)),
+                    borderRadius: const BorderRadius.all(Radius.circular(AppSize.s8)),
                     border: Border.all(
                       color: ColorManager.grey,
                     ),
@@ -304,9 +299,7 @@ class _RegisterViewState extends State<RegisterView> {
                       width: double.infinity,
                       height: AppSize.s60,
                       child: ElevatedButton(
-                        onPressed: (snapshot.data ?? false)
-                            ? () => _viewModel.register()
-                            : null,
+                        onPressed: (snapshot.data ?? false) ? () => _viewModel.register() : null,
                         child: const Text(
                           AppStrings.register,
                         ),

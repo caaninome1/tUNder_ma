@@ -59,7 +59,7 @@ Future<void> initAppModule() async {
 
 initLoginModule() {
   if (!GetIt.I.isRegistered<LoginUseCase>()) {
-    instance.registerFactory<LoginUseCase>(() => LoginUseCase(instance()));
+    instance.registerFactory<LoginUseCase>(() => LoginUseCase());
     instance.registerFactory<LoginViewModel>(() => LoginViewModel(instance()));
   }
 }
@@ -82,7 +82,7 @@ initForgetPasswordModule() {
 initRegisterModule() {
   if (!GetIt.I.isRegistered<RegisterUseCase>()) {
     instance
-        .registerFactory<RegisterUseCase>(() => RegisterUseCase(instance()));
+        .registerFactory<RegisterUseCase>(() => RegisterUseCase());
     instance.registerFactory<RegisterViewModel>(
         () => RegisterViewModel(instance()));
   }
