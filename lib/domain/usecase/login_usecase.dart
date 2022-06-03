@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:graphql/client.dart';
+import 'package:hive/hive.dart';
 import 'package:stores/data/network/failure.dart';
-import 'package:stores/data/network/requests.dart';
 import 'package:stores/domain/models/models.dart';
 import 'package:stores/domain/repository/GraphQLGateway.dart';
 
@@ -30,10 +30,14 @@ class LoginUseCase {
       },
     ));
     print(ans.data);
-    return Either.cond(
-        () => !ans.hasException,
-        () => Token(ans.data?["login"]["token"], ans.data?["login"]["userID"]),
-        () => Failure(1, "Credenciales incorrectas"));
+    if (!ans.hasException) {
+      Token token = Token(ans.data?['login']['token'], ans.data?['login']['userID']);
+      Hive.box('user').put('token', token.token);
+      Hive.box('user').put('userID', token.userID);
+      return Right(token);
+    } else {
+      return Left(Failure(1, "Credenciales incorrectas"));
+    }
   }
 }
 

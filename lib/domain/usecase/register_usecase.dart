@@ -63,7 +63,6 @@ class RegisterUseCase {
         },
       ));
       if (!ans2.hasException) {
-        print("entro");
         bool g = random.nextBool();
         QueryResult ans3 = await GraphQLGateway.getClient().mutate(MutationOptions(
           document: gql(petfilMutation),

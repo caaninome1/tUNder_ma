@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:stores/app/di.dart';
 import 'package:stores/domain/models/models.dart';
 import 'package:stores/presentation/common/state_renderer/state_rederer_implementer.dart';
@@ -56,22 +57,24 @@ class _HomePageState extends State<HomePage> {
 
   Widget _getScreenWidget() {
     return StreamBuilder<HomeViewObject>(
-      stream: _viewModel.outputHomeObject,
-      builder: (context, snapshot) {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _getBannerWidget(snapshot.data?.banners),
-            _getSection(AppStrings.services),
-            _getServiceWidget(snapshot.data?.services),
-            _getSection(AppStrings.stores),
-            _getStoreWidget(snapshot.data?.stores),
-          ],
-        );
-      }
-    );
+        stream: _viewModel.outputHomeObject,
+        builder: (context, snapshot) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(Hive.box('user').get('token') ?? 'No hay',
+                  style: TextStyle(
+                    color: ColorManager.white,
+                  )),
+              _getBannerWidget(snapshot.data?.banners),
+              _getSection(AppStrings.services),
+              _getServiceWidget(snapshot.data?.services),
+              _getSection(AppStrings.stores),
+              _getStoreWidget(snapshot.data?.stores),
+            ],
+          );
+        });
   }
-
 
   Widget _getBannerWidget(List<BannerAd>? banners) {
     if (banners != null) {
@@ -89,8 +92,7 @@ class _HomePageState extends State<HomePage> {
                 elevation: AppSize.s1_5,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSize.s12),
-                  side:
-                      BorderSide(color: ColorManager.white, width: AppSize.s1),
+                  side: BorderSide(color: ColorManager.white, width: AppSize.s1),
                 ),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(AppSize.s12),
@@ -139,8 +141,7 @@ class _HomePageState extends State<HomePage> {
                 elevation: AppSize.s4,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppSize.s12),
-                  side:
-                      BorderSide(color: ColorManager.white, width: AppSize.s1),
+                  side: BorderSide(color: ColorManager.white, width: AppSize.s1),
                 ),
                 child: Column(
                   children: [
@@ -179,8 +180,8 @@ class _HomePageState extends State<HomePage> {
   Widget _getStoreWidget(List<Store>? stores) {
     if (stores != null) {
       return Padding(
-        padding: const EdgeInsets.only(
-            left: AppPadding.p12, right: AppPadding.p12, top: AppPadding.p12),
+        padding:
+            const EdgeInsets.only(left: AppPadding.p12, right: AppPadding.p12, top: AppPadding.p12),
         child: Flex(
           direction: Axis.vertical,
           children: [
