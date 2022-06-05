@@ -64,7 +64,7 @@ class _HomePageState extends State<HomePage> {
             children: [
               Text(Hive.box('user').get('token') ?? 'No hay',
                   style: TextStyle(
-                    color: ColorManager.white,
+                    color: ColorManager.black,
                   )),
               _getBannerWidget(snapshot.data?.banners),
               _getSection(AppStrings.services),
